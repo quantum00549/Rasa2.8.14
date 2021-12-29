@@ -18,8 +18,8 @@
 
 &ensp;&ensp;&ensp;&ensp;1. 自定义action写在actions文件夹下,以机器人id为后缀,如actions_00033.py;  
 &ensp;&ensp;&ensp;&ensp;2. 对应数据、配置文件在data文件夹中新建一个文件夹并保存,如新建一个00033文件夹,并存放config、domain、nlu、rules、stories文件（sources文件夹下的total_word_feature_extractor_zh.dat已删除，因为github限制文件体积）;  
-&ensp;&ensp;&ensp;&ensp;3. 对应的模型数据,在models文件夹下心间一个文件夹,如新建一个00033文件夹,在模型训练的时候,指定这个文件夹为模型保存地址;  
-&ensp;&ensp;&ensp;&ensp;4. 如果需要保存日志,在logs文件夹下新建一个与机器人id同名的文件夹,如00033,每个机器人的日志保存在自己对应的位置;  
+&ensp;&ensp;&ensp;&ensp;3. 对应的模型数据,在根目录的models（如果没有，则新建一个）文件夹下新建一个文件夹,如新建一个00033文件夹,在模型训练的时候,指定这个文件夹为模型保存地址;  
+&ensp;&ensp;&ensp;&ensp;4. 如果需要保存日志,在logs（如果没有，则新建一个）文件夹下新建一个与机器人id同名的文件夹,如00033,每个机器人的日志保存在自己对应的位置;  
 &ensp;&ensp;&ensp;&ensp;5. 如何使用rasa开发,参考https://rasa.com/docs/rasa/；；  
 &ensp;&ensp;&ensp;&ensp;6. 在项目根目录中的docker-compose.yml文件中，新增新机器人的容器，记得给这个新容器取名，如rasabot_00033；  
 

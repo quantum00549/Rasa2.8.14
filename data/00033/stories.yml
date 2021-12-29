@@ -1,0 +1,173 @@
+version: "2.0"
+
+stories:
+
+- story: 闲聊 问候
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: action_restart
+
+- story: 闲聊 再见
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+  - action: action_restart
+
+- story: 闲聊 感谢
+  steps:
+  - intent: thanks
+  - action: utter_thanks
+  - action: action_restart
+
+- story: 能不能保 顺利对话流程
+  steps:
+  - intent: if_can_take_insurance
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_take_insurance
+# 也可以在rule中配置form行动
+
+- story: 预核保 顺利对话流程
+  steps:
+  - intent: pre_underwriting
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_pre_underwriting
+
+- story: 保中患病 顺利对话流程
+  steps:
+  - intent: sick_in_sail
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_sick_in_sail
+
+- story: 产品推荐 顺利对话流程
+  steps:
+  - intent: products_recommend
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_products_recommend
+
+- story: 疾病症状 顺利对话流程
+  steps:
+  - intent: symptoms
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_symptoms
+
+- story: 检查项目 顺利对话流程
+  steps:
+  - intent: check
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_check
+
+- story: 饮食禁忌 顺利对话流程
+  steps:
+  - intent: taboo
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_taboo
+
+- story: 推荐食物 顺利对话流程
+  steps:
+  - intent: recipe
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_recipe
+
+- story: 药物 顺利对话流程
+  steps:
+  - intent: drug
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_drug
+
+- story: 诊断 顺利对话流程
+  steps:
+  - intent: check_out
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_check_out
+
+- story: 治疗 顺利对话流程
+  steps:
+  - intent: treat
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_treat
+
+- story: 预防 顺利对话流程
+  steps:
+  - intent: prevent
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_prevent
+
+- story: 就诊科室 顺利对话流程
+  steps:
+  - intent: medical_departments
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_medical_departments
+
+- story: 并发症 顺利对话流程
+  steps:
+  - intent: complication
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_complication
+
+- story: 寿险核保定义 顺利对话流程，不需要确定疾病
+  steps:
+  - intent: definition_of_underwriting_of_life_insurance
+  - action: action_definition_of_underwriting_of_life_insurance
+
+- story: 核保目的 顺利对话流程，不需要确定疾病
+  steps:
+  - intent: purpose_of_underwriting
+  - action: action_purpose_of_underwriting
+
+- story: 核保规则 顺利对话流程
+  steps:
+  - intent: rule_of_underwriting
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_rule_of_underwriting
+
+- story: 病因 顺利对话流程
+  steps:
+  - intent: pathogen
+  - action: get_disease_form
+  - active_loop: get_disease_form
+  - active_loop: null
+  - action: action_pathogen
+
+
+
+
+
+
+
+
+
+
+
+
+

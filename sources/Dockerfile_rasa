@@ -1,0 +1,19 @@
+# 为了往官方的镜像里添加一些依赖包,而写的Dockfile
+
+FROM rasa/rasa:2.8.14-full  
+# 官方提供的sdk镜像
+USER root
+# 切换到root用户,不然pip会报错
+COPY requirements.txt /home
+# 把requirements.txt复制进来
+
+RUN apt-get update -qq && \
+    apt-get install sudo && \
+    sh -c '/bin/echo -e "\nY" | sudo apt install -y build-essential' && \
+    sudo apt-get install -y python3-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN pip install --no-cache-dir -r /home/requirements.txt
+
+USER 1001 

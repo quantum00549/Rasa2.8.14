@@ -1,0 +1,23 @@
+version: '3.0'
+services:
+  rasabot_00033:
+    image: quantum00549/my_rasa:1.2
+    ports:
+      - 5005:5005
+    # expose: 
+    #   - 5005
+    volumes:
+      - ./:/app
+    command:
+      - run
+      - --model
+      - models/00033
+
+  action-server:
+    image: quantum00549/my_rasasdk:1.2
+    volumes:
+      - ./actions:/app/actions
+    expose: 
+      - 5055
+
+

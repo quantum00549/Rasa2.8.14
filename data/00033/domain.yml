@@ -1,0 +1,132 @@
+version: "2.0"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - thanks
+  - if_can_take_insurance  # 能不能保
+  - pre_underwriting  # 预核保
+  - sick_in_sail  # 保中患病
+  - products_recommend  # 保险产品推荐
+  - symptoms  # 症状
+  - check  # 检查项目
+  - taboo  # 饮食禁忌
+  - recipe  # 推荐食物
+  - drug  # 药物
+  - check_out  # 诊断
+  - treat  # 治疗
+  - prevent  # 预防
+  - medical_departments  # 就诊科室
+  - complication  # 并发症
+  - definition_of_underwriting_of_life_insurance  # 寿险核保定义
+  - purpose_of_underwriting  # 核保目的
+  - rule_of_underwriting  # 核保规则
+  - pathogen  # 病因
+
+entities:
+  - disease_name
+
+slots:
+  disease_name:
+    type: text
+    influence_conversation: false
+# 和form中的slots一样,普通的slot也可以自定义mapping方法,本例暂时用不到,先写在这里以备后续学习；
+# 这里有个坑，就是influence_conversation参数默认为True，多数时候，除非特殊设计，True或者False不影响什么东西；
+# 但是某些行动预测组件会因为多了这么个特征，尤其是在story里没有slot was set的相关故事，下一步action的预测就不可控了；
+# 如无必要建议设置为False
+# 参考https://rasa.com/docs/rasa/domain#custom-slot-mappings
+
+forms: 
+  get_disease_form: 
+    ignored_inents: 
+      - greet
+    required_slots: 
+      disease_name: 
+        - type: from_entity
+          entity: disease_name
+# 新计划，打算在actions里自定义disease_name这个卡槽的抽取方案，不用rasa的ner组件
+# 20211126日:上一行注释的计划,不能完美实现,因为,如果这里不写required slots,rasa源代码会报错(找不到form),
+# 但是我又不需要其他slot
+# 这种疏忽理论上不该出现,这么操作后,日志里会提示两个地方的slot mapping重复,会被自定义的mapping方法覆盖,先这样用吧
+
+actions:
+  - validate_get_disease_form
+  - action_ask_disease_name
+  - action_take_insurance
+  - action_pre_underwriting
+  - action_sick_in_sail
+  - action_products_recommend  # 保险产品推荐
+  - action_symptoms  # 症状
+  - action_check  # 检查项目
+  - action_taboo  # 饮食禁忌
+  - action_recipe  # 推荐食物
+  - action_drug  # 药物
+  - action_check_out  # 诊断
+  - action_treat  # 治疗
+  - action_prevent  # 预防
+  - action_medical_departments  # 就诊科室
+  - action_complication  # 并发症
+  - action_definition_of_underwriting_of_life_insurance  # 寿险核保定义
+  - action_purpose_of_underwriting  # 核保目的
+  - action_rule_of_underwriting  # 核保规则
+  - action_pathogen  # 病因
+  - action_ask_intent
+
+responses:
+  utter_greet:
+  - text: "hi，有什么可以帮您吗？"
+  - text: "您好!很高兴为您服务/:rose"
+  - text: "我在哦，有什么可以帮到您吗？"
+  - text: "我在哦～"
+
+  utter_goodbye:
+  - text: "Bye"
+  - text: "再见～"
+  - text: "再见，期待下次为您服务"
+
+  utter_thanks:
+  - text: "不用谢/:circle"
+  - text: "感谢您的咨询，如果有问题可以随时找我哦～"
+  - text: "不客气哦～"
+
+
+# 下面的button模板，注意格式！报格式错误还是好的，就怕能读yml文件但是有隐藏错误！
+# 参考https://rasa.com/docs/rasa/responses#buttons，逐个字符校验！
+  utter_ask_intent:
+    - text: "请问您是想问什么呢？"
+      buttons:
+      - title: "能不能保"
+        payload: "/if_can_take_insurance"
+      - title: "预核保"
+        payload: "/pre_underwriting"
+      - title: "保中患病"
+        payload: "/sick_in_sail"
+
+  utter_suggest_intent:
+    - text: "猜您想问："
+      buttons:
+      - title: "预核保"
+        payload: "/pre_underwriting"
+      - title: "保险产品推荐"
+        payload: "/products_recommend"
+
+
+# 按照官方文档，Form不再通过自定义FormAction实现，如有特殊需求，可重写slot验证等相关方法，
+# 引导填槽时，rasa会自动搜索相关自定义response，描述如下：
+# It does this by looking for a response called utter_ask_<form_name>_<slot_name>,
+# or utter_ask_<slot_name> if the former isn't found.
+
+
+session_config:
+  session_expiration_time: 30  # value in minutes, 0 means infinitely long
+  carry_over_slots_to_new_session: false  # set to false to forget slots between sessions
+
+
+
+
+
+
+
+

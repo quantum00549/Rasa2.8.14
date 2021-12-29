@@ -1,0 +1,352 @@
+version: "2.0"
+
+nlu:
+# 下面的是意图识别的正则特征，是特征，不是绝对的，如果表现不好，还是需要调模型的，官方文档摘要如下：
+# When using the RegexFeaturizer, a regex does not act as a rule for classifying an intent.
+# It only provides a feature that the intent classifier will use to learn patterns for intent classification.
+# 详细信息参考：https://rasa.com/docs/rasa/2.x/nlu-training-data#regular-expressions
+
+- regex: treat  # 这里名字是这个正则的名字，不是意图的名字，如上所述，这个正则只是特征之一。和意图同名，只是为了方便查询这个正则的作用。
+  examples: |
+    - \b医治\b
+    - \b治疗\b
+    - \b治愈\b
+    - \b缓解\b
+
+- regex: sick_in_sail
+  examples: |
+    - \b保中患病\b
+
+- regex: products_recommend
+  examples: |
+    - \b产品推荐\b
+    - \b保险推荐\b
+
+- regex: symptoms
+  examples: |
+    - \b症状\b
+
+- regex: prevent
+  examples: |
+    - \b预防\b
+
+- regex: check_out
+  examples: |
+    - \b诊断\b
+
+- regex: pathogen
+  examples: |
+    - \b病因\b
+
+- regex: rule_of_underwriting
+  examples: |
+    - \b核保规则\b
+    - \b核保的规则\b
+
+- intent: if_can_take_insurance
+  examples: |
+    - 能不能保
+    - 能投保吗
+    - 能保吗
+    - 能不能投保
+    - 能不能买保险
+    - 能买保险吗
+    - 癌症家族史能不能保
+    - 能投保吗
+    - 癌症家族史能投保吗
+    - 能不能投保
+    - 能不能买保险
+    - 能买保险吗
+
+- intent: pre_underwriting
+  examples: |
+    - 预核保
+    - 预核保
+
+- intent: sick_in_sail
+  examples: |
+    - 保中患病
+    - 肝炎保中患病
+
+- intent: products_recommend
+  examples: |
+    - 产品推荐
+    - 保险产品推荐
+    - 保险推荐
+    - 推荐
+
+- intent: symptoms
+  examples: |
+    - 什么症状
+    - 有什么症状
+    - 有哪些症状
+    - 都有些啥症状
+    - 表现症状有哪些
+    - 症状是什么
+    - 会有哪些症状表现
+    - 一般有哪些症状
+    - 主要症状有哪些
+    - 主要症状是什么
+    - 常见症状有哪些
+    - 有何症状
+    - 症状都有哪些
+
+- intent: taboo
+  examples: |
+    - 不可以吃什么
+    - 不可以吃什么食物
+    - 哪些东西不能吃
+    - 哪些食物不能吃
+    - 不能吃什么东西
+    - 不能吃什么食物
+    - 吃什么食物不好
+    - 吃什么食物对身体不好
+    - 哪些食物要忌口
+    - 哪些食物不宜吃
+    - 不应该吃什么
+    - 不适合吃的食物有哪些
+    - 禁止吃哪些食物
+    - 禁止吃什么东西
+
+- intent: recipe
+  examples: |
+    - 可以吃什么
+    - 可以吃什么食物
+    - 哪些东西可以吃
+    - 哪些食物是可以吃的
+    - 吃什么食物有好处
+    - 吃什么食物对身体有好处
+    - 建议吃哪些食物
+    - 适宜吃哪些食物
+    - 推荐食用哪些食物
+    - 适合吃的食物有哪些
+
+- intent: drug
+  examples: |
+    - 可以服用什么药
+    - 常用药品有哪些
+    - 可以吃哪些药
+    - 可以吃什么药
+    - 该吃什么药
+    - 服用什么药效果好
+    - 治疗药物有哪些
+    - 服用哪些药可以治疗
+    - 治疗的常规用药有哪些
+    - 可以服用哪些常用药品治疗
+    - 治疗效果好的药有哪些
+    - 治疗效果好的常用药有哪些
+
+- intent: check
+  examples: |
+    - 需要检查什么项目
+    - 需要检查哪些项目
+    - 有哪些检查项目
+    - 检查项目是什么
+    - 检查项目名称是什么
+    - 需要做哪些检查
+    - 要做的检查项目有哪些
+    - 要去做什么检查
+    - 需要做什么检查
+
+- intent: check_out
+  examples: |
+    - 诊断这个病最有效的方法是什么
+    - 怎么诊断
+    - 如何诊断
+    - 如何确诊
+    - 最可靠的诊断依据是什么
+    - 诊断方法
+    - 诊断方法是什么
+    - 最可靠的诊断方法是什么
+    - 诊断最有效的方法
+    - 诊断的主要依据
+    - 诊断的主要依据是什么
+
+- intent: treat
+  examples: |
+    - 如何治疗呢
+    - 如何治疗
+    - 如何缓解
+    - 怎么医治
+    - 该怎么医治
+    - 怎么治疗
+    - 怎样治疗
+    - 怎样医治
+    - 治疗方法有哪些
+    - 治疗方法是什么
+    - 哪些治疗方式效果好
+    - 如何治愈
+    - 要怎么医治
+    - 如何医治
+    - 医治
+    - 治疗
+    - 二硫化碳中毒该怎么医治
+
+- intent: prevent
+  examples: |
+    - 如何预防|prevent
+    - 怎么预防|prevent
+    - 怎么预防得病|prevent
+    - 怎么预防患病|prevent
+    - 如何防止患|prevent
+    - 预防的有效方式有哪些|prevent
+    - 如何避免患|prevent
+    - 预防方法有哪些|prevent
+    - 预防措施有哪些|prevent
+    - 预防的方法有什么|prevent
+
+- intent: medical_departments
+  examples: |
+    - 就诊科室
+    - 去哪个科室
+    - 去哪个科室看病
+    - 去哪个科室就诊
+    - 看什么科
+    - 看什么科室
+    - 可以看哪些科室
+    - 就诊科室是什么
+    - 属于什么科就诊
+    - 挂什么科室就诊
+    - 专科门诊是什么
+    - 去哪些科室就诊
+    - 去看哪个科室
+    - 去哪里就诊
+    - 肺念珠菌病的专科门诊是什么
+    - 病的专科门诊是什么
+    - 病的就诊科室是什么
+
+- intent: complication
+  examples: |
+    - 并发症
+    - 有哪些并发症
+    - 有什么并发症
+    - 都有什么并发症
+    - 会有什么并发症
+    - 会有哪些并发症
+    - 一般有哪些并发症
+    - 主要并发症是什么
+    - 主要并发症有哪些
+    - 常见并发症
+    - 有何并发症
+    - 常见并发症有哪些
+    - 并发症有哪些
+    - 这个病的并发症
+
+- intent: definition_of_underwriting_of_life_insurance
+  examples: |
+    - 寿险核保怎么定义的
+    - 什么是寿险核保
+
+- intent: purpose_of_underwriting
+  examples: |
+    - 核保的目的是什么
+    - 核保目的
+    - 为什么要核保
+
+- intent: rule_of_underwriting
+  examples: |
+    - 核保通用规则
+    - 核保规则
+
+- intent: pathogen
+  examples: |
+    - 病因
+    - 为什么会得这个病
+    - 这个病怎么得的
+    - 为什么会得乙肝
+    - 为什么会患
+    - 怎么会患上
+    - 因为什么患
+    - 是什么原因引起的
+    - 是什么引起的
+    - 致病性是什么
+    - 病因是什么
+    - 病因是怎么回事
+    - 是因为什么导致的
+    - 发病原因是什么
+    - 致病原因是什么
+    - 得病原因是什么
+    - 病因是什么
+
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - 你好
+    - 您好
+    - 你好,在吗
+    - 你好你好
+    - 哈罗
+    - 在吗
+    - 哈喽
+    - 还在吗
+    - 人呢
+    - 怎么不回复了
+
+- intent: goodbye
+  examples: |
+    - goodbye
+    - bye
+    - see you later
+    - 拜拜
+    - 拜
+    - 走了
+    - 再见
+    - 很高兴和你说话
+
+- intent: affirm
+  examples: |
+    - yes
+    - 是的
+    - 好的
+    - 行
+    - 行的
+    - 对的
+    - 没错
+    - 没毛病
+    - 可以的
+    - 中
+    - 没问题
+    - 嗯
+    - 恩
+    - 好
+    - ok
+
+- intent: deny
+  examples: |
+    - no
+    - 不是
+    - 不对
+    - 不要
+    - 有问题
+    - 不行
+    - 不可以
+    - 不中
+    - 不好
+    - 不需要
+    - 不用了
+    - 不
+    - 以上都不是
+
+- intent: thanks
+  examples: |
+    - 谢谢
+    - 谢谢你
+    - 谢谢您
+    - 非常感谢
+    - 谢谢啊
+    - 谢了
+    - 谢啦
+    - 可以了,谢谢
+    - 感谢
+    - 感恩
+    - 谢了哈
+    - 谢谢哦
+    - 谢谢亲
+    - 谢谢,我先试试看
+    - 知道了,谢谢
+    - 谢

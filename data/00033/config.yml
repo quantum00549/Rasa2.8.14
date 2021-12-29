@@ -1,0 +1,111 @@
+# Configuration for Rasa NLU.
+# https://rasa.com/docs/rasa/nlu/components/
+language: zh  # 中文
+
+pipeline:
+  - name: MitieNLP
+    model: sources/total_word_feature_extractor_zh.dat  # mitie用到的模型文件地址。因为github限制文件大小，所以我删了，自己搜索就能找到。
+  - name: JiebaTokenizer
+    # dictionary_path: user dict地址，有的话就取消注释并填写用户词典的地址
+    intent_tokenization_flag: False
+    # Flag to check whether to split intents
+    intent_split_symbol: _
+    # Symbol on which intent should be split
+    token_pattern: None
+    # Regular expression to detect tokens
+  - name: MitieEntityExtractor
+  - name: EntitySynonymMapper
+  # 第二个ner组件，官方文档的说法是Maps synonymous entity values to the same value，
+  # 我理解的是跟在上一个ner组件之后，并做同义词映射，文档里也说了，该组件还需要An extractor from Entity Extractors，就是需要别的ner组件
+
+  # - name: LanguageModelFeaturizer
+  #   # Name of the language model to use
+  #   model_name: "bert"
+  #   # Pre-Trained weights to be loaded
+  #   model_weights: "bert-base-chinese"
+  #   # An optional path to a specific directory to download and cache the pre-trained model weights.
+  #   # The `default` cache_dir is the same as https://huggingface.co/transformers/serialization.html#cache-directory .
+  #   cache_dir: null
+
+  - name: MitieFeaturizer  # 特征提取器，用于后面的意图分类,很多分类器都依赖特征提取器
+    pooling: mean
+
+  # - name: SklearnIntentClassifier
+  #   C: [1, 2, 5, 10, 20, 100]
+  #   # Specifies the list of regularization values to
+  #   # cross-validate over for C-SVM.
+  #   # This is used with the ``kernel`` hyperparameter in GridSearchCV.
+  #   kernels: ["linear"]
+  #   # Specifies the kernel to use with C-SVM.
+  #   # This is used with the ``C`` hyperparameter in GridSearchCV.
+  #   gamma: [0.1]
+  #   # Gamma parameter of the C-SVM.
+  #   max_cross_validation_folds: 5
+  #   # We try to find a good number of cross folds to use during
+  #   # intent training, this specifies the max number of folds.
+  #   scoring_function: f1_weighted
+  #   # Scoring function used for evaluating the hyper parameters.
+  #   # This can be a name or a function.
+
+  - name: "RegexFeaturizer"
+    # Text will be processed with case sensitive as default
+    "case_sensitive": False
+    # use match word boundaries for lookup table
+    "use_word_boundaries": False
+    # 这个要设置成False，参考官方文档：
+    # To correctly process languages such as Chinese that don't use whitespace for word separation, the user needs to add the use_word_boundaries: False option
+
+
+  - name: DIETClassifier
+  # 该分类器需要pipeline中有特征提取器；
+  # 此外，还有实体提取功能，所以如果还有别的实体提取器，训练时会提示“重复的实体抽取器”（即便我设置entity_recognition参数为False，还是会有这个提示）；
+  # 除非你用了框架的实体抽取器，导致训练和推理过慢，否则无视即可；
+  # 详见https://rasa.com/docs/rasa/components#dietclassifier
+    epochs: 300
+    entity_recognition: False
+    constrain_similarities: true
+    # 这个constrain_similarities参数，官方的说法是This parameter when set to True applies a sigmoid cross entropy loss over all similarity terms.
+    # 建议设置为True。
+  - name: FallbackClassifier
+    threshold: 0.7
+    ambiguity_threshold: 0.1
+  # 从官方文档上看，这一步是用于意图分类最高得分低于阈值，或者前两个最高得分类别分数差低于阈值时，就把意图归类为fallback
+  # 不是很明白这里为什么需要额外设置这么个分类器，直接在policy里设置就够了(rasa1中就是如此)，可能这个分类器只是名字上是个分类器,实际上只是个判断逻辑?
+  # 为了配置文件的一致性才这么设计的?不过框架是别人的，人家说怎么用就怎么用吧
+  # 意图不明确时的行动规则，在rules.yml设置
+
+
+# Spacy之类配置起来挺麻烦的，而且一般任务用上面这一套mitie+jieba+sklearn足以应付，没事别瞎折腾
+# 要配置的话，参考https://www.notion.so/a5480a94537d4093bba82bf4110aed8a
+# 用sklearn当意图分类器的话，参数比较多，不过多数时候用默认的就行，想调参可以参考注释和sklearn文档
+
+
+# Configuration for Rasa Core.
+# https://rasa.com/docs/rasa/core/policies/
+policies:
+# # No configuration for policies was provided. The following default policies were used to train your model.
+# # If you'd like to customize them, uncomment and adjust the policies.
+# # See https://rasa.com/docs/rasa/policies for more information.
+   - name: MemoizationPolicy
+     max_history: 5
+# 关于这个MemoizationPolicy，官方文档的说法是：
+# The MemoizationPolicy remembers the stories from your training data. It checks if the current conversation matches the stories in your stories.yml file.
+# If so, it will predict the next action from the matching stories of your training data with a confidence of 1.0.
+# If no matching conversation is found, the policy predicts None with confidence 0.0.
+# 对于预设好的story表现很好，但是story没有覆盖的对话无能为力，可以作为仅次于rule的最高判断依据。
+
+   - name: RulePolicy  # FormPolicy已经被弃用，如果需要FormPolicy，只需要这里有这个RulePolicy就行
+   - name: TEDPolicy  # transformer结构的行动预测，会结合用户输入文本当特征
+     max_history: 5
+     epochs: 50
+     constrain_similarities: true
+#   - name: UnexpecTEDIntentPolicy
+#     max_history: 5
+#     epochs: 100
+#    处于测试中的组件，主要是记录unhappy path，以及处理意料之外的对话,先记录在这，测试功能也可能不上线，先不用
+
+
+
+
+
+

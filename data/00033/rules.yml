@@ -1,0 +1,18 @@
+version: "2.0"
+
+# 在rasa2中，rule对话不必出现在story片段中，
+# 同时，rule对话也不会影响policy模块对action的预测。
+# 不要滥用rule
+
+rules:
+
+- rule: NLU意图预测置信度不够，或者排名前两位的意图置信度差小于阈值时采取的行动,即rasa1中的FallbackPolicy,挪到这来了
+  steps:
+    - intent: nlu_fallback
+    - action: action_ask_intent
+
+
+
+
+
+
